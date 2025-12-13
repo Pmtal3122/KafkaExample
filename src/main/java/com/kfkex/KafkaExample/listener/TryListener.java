@@ -18,21 +18,8 @@ public class TryListener {
     private final JsonMapper jsonMapper;
 
     @KafkaListener(topics = "topic1", groupId = "group1", id = "listener1", autoStartup = "true", containerFactory = "kafkaListenerContainerFactory")
-    public void listen(String data) {
-        log.info("[tryListener] Group: {}, Message: {}", GROUP_1, data);
-        JsonNode jsonNode = jsonMapper.convertValue(data, JsonNode.class); // Wrong one
-
-        JsonNode jsonNode1 = jsonMapper.readTree(data); // Correct one
-
-//        log.info("[tryListener] jsonNode1: {}", jsonNode1.toPrettyString());
-
-        List<String> valuesList = jsonNode1.get("data")
-                .get("messages")
-                .valueStream()
-                .map(node -> node.get("value").toString())
-                .toList();
-
-        log.info("[tryListener] Values List: {}", valuesList);
+    public void listen(List<String> topics) {
+        log.info("[tryListener] Group: {}, Message: {}", GROUP_1, topics);
     }
 }
 
